@@ -2,6 +2,7 @@ require 'pathname'
 require 'sqlite3'
 require 'active_record'
 require 'logger'
+require 'formatador'
 
 APP_ROOT = Pathname.new(File.expand_path(File.join(File.dirname(__FILE__), '..')))
 
@@ -19,6 +20,11 @@ end
 # See http://www.rubyinside.com/ruby-techniques-revealed-autoload-1652.html
 
 Dir[APP_ROOT.join('app', 'models', '*.rb')].each do |model_file|
+  filename = File.basename(model_file).gsub('.rb', '')
+  autoload ActiveSupport::Inflector.camelize(filename), model_file
+end
+
+Dir[APP_ROOT.join('app', 'controllers', '*.rb')].each do |model_file|
   filename = File.basename(model_file).gsub('.rb', '')
   autoload ActiveSupport::Inflector.camelize(filename), model_file
 end
